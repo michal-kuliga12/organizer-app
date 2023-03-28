@@ -1,31 +1,35 @@
+import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import axios from "axios";
+import { Dayjs } from "dayjs";
 import React, { useEffect, useState } from "react";
 import { ITask } from "../interfaces/task";
+import useFetch from "../hooks/useFetch";
 
 const ToDo: React.FC = () => {
-  const [data, setData] = useState();
-  const [task, setTask] = useState<ITask>({
+  const [value, setValue] = useState<Dayjs | null>(null);
+  const [getDate, setGetDate] = useState<object | Dayjs | null>(new Date());
+  const [newTask, setNewTask] = useState<ITask>({
     name: "",
     deadline: "",
   });
-  useEffect(() => {
-    const getTasks = async () => {
-      const response = await axios.get("http://localhost:5000/task");
-      console.log(response);
-      setData(response.data);
-    };
-    getTasks();
-  }, []);
-  console.log(task);
+  const { data, loading, error, reFetch } = useFetch(
+    `http://localhost:5000/task/${getDate}`,
+    { date: getDate },
+    "get"
+  );
   const addTask = async (task: ITask) => {
     const { name, deadline } = task;
+    if (name === "" || deadline === "") return;
     try {
-      await axios.post("http://localhost:5000/task", { name, deadline });
-      console.log("sent");
+      await axios.post("http://localhost:5000/task", {
+        name,
+        deadline,
+      });
     } catch (err) {
       console.error(err);
     }
   };
+
   return (
     <div className="todo">
       <form>
@@ -33,7 +37,7 @@ const ToDo: React.FC = () => {
           <input
             onChange={(e) => {
               e.preventDefault();
-              setTask({ ...task, name: e.target.value });
+              setNewTask({ ...newTask, name: e.target.value });
             }}
             type="text"
             name="task"
@@ -41,33 +45,34 @@ const ToDo: React.FC = () => {
             placeholder="Task..."
           />
         </label>
-        <label htmlFor="deadline">
-          <input
-            onChange={(e) => {
-              e.preventDefault();
-              setTask({
-                ...task,
-                deadline: e.target.value,
-              });
-            }}
-            type="date"
-            name="deadline"
-            id="deadline"
-            placeholder="2018-01-01"
-          />
-        </label>
         <button
           onClick={(e) => {
             e.preventDefault();
-            addTask(task);
+            addTask(newTask);
           }}
         >
           add task
         </button>
       </form>
+      <DateCalendar
+        value={value}
+        onChange={(newValue) => {
+          setValue(newValue);
+          setNewTask({
+            ...newTask,
+            deadline: newValue.$d,
+          });
+          setGetDate(newValue.$d);
+          console.log(typeof getDate);
+        }}
+      />
       <ul className="taskList">
-        {data?.map((task) => {
-          return <li>{task.name}</li>;
+        {data?.map((item) => {
+          return (
+            <div>
+              <h2>{item.name}</h2>
+            </div>
+          );
         })}
       </ul>
     </div>
