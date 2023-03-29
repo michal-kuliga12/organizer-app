@@ -4,10 +4,14 @@ import axios from "axios";
 const useFetch = (url: string, body: object | null | Date, method: string) => {
   const [data, setData] = useState<object | null>(null);
   const [error, setError] = useState<Error | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
+  const reFetch = () => {
+    console.log("refetched");
+  };
   console.log(url, body, method);
   useEffect(() => {
     const dataFetch = async () => {
+      setLoading(true);
       try {
         const response = await axios({
           method: method,
@@ -24,21 +28,6 @@ const useFetch = (url: string, body: object | null | Date, method: string) => {
     };
     dataFetch();
   }, [url]);
-  const reFetch = async () => {
-    try {
-      const response = await axios({
-        method: method,
-        url: url,
-        data: { params: body },
-      });
-      console.log(response.data);
-      setData(response.data);
-      setLoading(false);
-    } catch (err) {
-      setError(err);
-      setLoading(false);
-    }
-  };
   return { data, loading, error, reFetch };
 };
 export default useFetch;

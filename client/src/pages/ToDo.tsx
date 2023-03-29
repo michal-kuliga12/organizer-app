@@ -4,6 +4,8 @@ import { Dayjs } from "dayjs";
 import React, { useEffect, useState } from "react";
 import { ITask } from "../interfaces/task";
 import useFetch from "../hooks/useFetch";
+import { Badge } from "@mui/material";
+import { PickersDay, PickersDayProps } from "@mui/x-date-pickers";
 
 const ToDo: React.FC = () => {
   const [value, setValue] = useState<Dayjs | null>(null);
@@ -12,6 +14,7 @@ const ToDo: React.FC = () => {
     name: "",
     deadline: "",
   });
+  const [daysToHighlight, setDaysToHighlight] = useState([11]);
   const { data, loading, error, reFetch } = useFetch(
     `http://localhost:5000/task/${getDate}`,
     { date: getDate },
@@ -25,56 +28,97 @@ const ToDo: React.FC = () => {
         name,
         deadline,
       });
+      reFetch();
     } catch (err) {
       console.error(err);
     }
   };
+  function ServerDay(
+    props: PickersDayProps<Dayjs> & { highlightedDays?: number[] }
+  ) {
+    const { highlightedDays = [], day, outsideCurrentMonth, ...other } = props;
 
+    const isSelected =
+      !props.outsideCurrentMonth &&
+      highlightedDays.indexOf(props.day.date()) > 0;
+    console.log(props);
+    console.log(isSelected);
+    console.log(highlightedDays.indexOf);
+
+    return (
+      <Badge
+        key={props.day.toString()}
+        overlap="circular"
+        badgeContent={isSelected ? "🌚" : undefined}
+      >
+        <PickersDay
+          {...other}
+          outsideCurrentMonth={outsideCurrentMonth}
+          day={day}
+        />
+      </Badge>
+    );
+  }
   return (
     <div className="todo">
-      <form>
-        <label htmlFor="task">
-          <input
-            onChange={(e) => {
-              e.preventDefault();
-              setNewTask({ ...newTask, name: e.target.value });
+      <div className="">
+        <div>
+          <DateCalendar
+            loading={loading}
+            value={value}
+            onChange={(newValue) => {
+              setValue(newValue);
+              setNewTask({
+                ...newTask,
+                deadline: newValue.$d,
+              });
+              setGetDate(newValue.$d);
+              console.log(typeof getDate);
             }}
-            type="text"
-            name="task"
-            id="task"
-            placeholder="Task..."
+            slots={{
+              day: ServerDay,
+            }}
+            slotProps={{
+              day: {
+                daysToHighlight,
+              } as any,
+            }}
           />
-        </label>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            addTask(newTask);
-          }}
-        >
-          add task
-        </button>
-      </form>
-      <DateCalendar
-        value={value}
-        onChange={(newValue) => {
-          setValue(newValue);
-          setNewTask({
-            ...newTask,
-            deadline: newValue.$d,
-          });
-          setGetDate(newValue.$d);
-          console.log(typeof getDate);
-        }}
-      />
-      <ul className="taskList">
-        {data?.map((item) => {
-          return (
-            <div>
-              <h2>{item.name}</h2>
-            </div>
-          );
-        })}
-      </ul>
+          <form>
+            <label htmlFor="task">
+              <input
+                onChange={(e) => {
+                  e.preventDefault();
+                  setNewTask({ ...newTask, name: e.target.value });
+                }}
+                type="text"
+                name="task"
+                id="task"
+                placeholder="Task..."
+              />
+            </label>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                addTask(newTask);
+              }}
+            >
+              add task
+            </button>
+          </form>
+        </div>
+        <div className="activeTasks">
+          <ul className="tasks">{/* {data.map((task,index)=>{})} */}</ul>
+        </div>
+      </div>
+      <div>
+        <div className="pendingTasks">
+          <ul className="tasks">{/* {data.map((task,index)=>{})} */}</ul>
+        </div>
+        <div className="doneTasks">
+          <ul className="tasks">{/* {data.map((task,index)=>{})} */}</ul>
+        </div>
+      </div>
     </div>
   );
 };
