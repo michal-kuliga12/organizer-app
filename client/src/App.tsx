@@ -6,14 +6,18 @@ import "./App.scss";
 import { LocalizationProvider, plPL } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Test from "./pages/Test";
+import store from "./app/store";
+import { selectTheme } from "./features/theme/themeSlice";
+import { useAppSelector } from "./app/hooks";
 
 const Layout = () => {
+  const theme = useAppSelector(selectTheme);
   return (
-    <>
+    <div className="app" id={theme}>
       <Navbar />
       <Outlet />
       <Footer />
-    </>
+    </div>
   );
 };
 const router = createBrowserRouter([
