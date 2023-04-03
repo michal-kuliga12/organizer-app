@@ -1,54 +1,61 @@
-import React, { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import React, { useEffect, useState } from "react";
 import TodoItemComp from "../../components/TodoItem";
 import { ITodo } from "../../interfaces/todo";
 import styles from "./Todo.module.scss";
+import useFetch from "../../hooks/useFetch";
+import axios from "axios";
+import { ITask } from "../../interfaces/task";
 
 class TodoItem {
-  todo_uid: string;
-  todo_name: string;
-  todo_status: string;
-  todo_created: Date;
-  todo_deadline: Date;
-  constructor(
-    id: string,
-    name: string,
-    status: string,
-    deadline: Date,
-    createdAt: Date
-  ) {
-    this.todo_uid = id;
-    this.todo_name = name;
-    this.todo_status = status;
-    this.todo_created = deadline;
-    this.todo_deadline = createdAt;
+  name: string;
+  status: string;
+  created: Date;
+  deadline: Date;
+  constructor(name: string, status: string, deadline: Date, createdAt: Date) {
+    this.name = name;
+    this.status = status;
+    this.created = deadline;
+    this.deadline = createdAt;
   }
 }
-const Todo = () => {
-  const [todosData, setTodosData] = useState<ITodo[]>([]);
+const Todo = ({ tasks, newTask, setNewTask }) => {
+  const [todosData, setTodosData] = useState<ITask[]>(tasks);
+  useEffect(() => {
+    setTodosData(tasks);
+  }, [tasks]);
+  console.log(todosData);
+  const postTodo = async (body) => {
+    try {
+      await axios.post(`http://localhost:5000/task`, body);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   // TEMPORARY CREATING TODO
   const addTodo = () => {
     const newTodo = new TodoItem(
-      uuidv4(),
-      "Do przenoszenia",
-      "todo",
-      new Date("2023-04-12"),
-      new Date()
+      newTask.name,
+      newTask.status,
+      new Date(),
+      newTask.deadline
     );
+    console.log(newTodo);
     if (todosData?.length > 0) {
       setTodosData([...todosData, newTodo]);
+      postTodo(newTodo);
       return;
     }
     return setTodosData([newTodo]);
   };
   // DELETING TODO BY ID
-  const deleteTodo = (uid: string) => {
-    const tempTodoData = todosData.filter((todo) => todo.todo_uid !== uid);
+  const deleteTodo = (id: string) => {
+    const tempTodoData = todosData.filter((todo) => todo.id !== id);
     setTodosData([...tempTodoData]);
   };
   // DRAGGING START
   const dragStarted = (e: React.DragEvent<HTMLLIElement>, id: string) => {
-    e.dataTransfer.setData("todoId", id);
+    console.log(id);
+    e.dataTransfer.setData("todoid", id);
   };
   // DRAGGING OVER
   const draggingOver = (e: React.DragEvent<HTMLUListElement>) => {
@@ -59,13 +66,13 @@ const Todo = () => {
     e: React.DragEvent<HTMLUListElement>,
     newStatus: string
   ) => {
-    const transferedTodoUID = e.dataTransfer.getData("TodoId");
-    todoStatusChange(transferedTodoUID, newStatus);
+    const transferedTodoid = e.dataTransfer.getData("Todoid");
+    todoStatusChange(transferedTodoid, newStatus);
   };
-  const todoStatusChange = (uid: string, newStatus: string) => {
-    const todoIndex = todosData!.findIndex((todo) => todo.todo_uid === uid);
-    let foundTodo = todosData!.filter((todo) => todo.todo_uid === uid);
-    foundTodo[0]!.todo_status = newStatus;
+  const todoStatusChange = (id: string, newStatus: string) => {
+    const todoIndex = todosData!.findIndex((todo) => todo.id === id);
+    let foundTodo = todosData!.filter((todo) => todo.id === id);
+    foundTodo[0]!.status = newStatus;
     let tempTodoData: ITodo[] = todosData;
     tempTodoData[todoIndex] = foundTodo[0];
     setTodosData([...tempTodoData]);
@@ -75,6 +82,19 @@ const Todo = () => {
   return (
     <div className={styles.container}>
       <div className={styles.toolbar}>
+        <form>
+          <label for="task_name">
+            <input
+              onChange={(e) => {
+                setNewTask({ ...newTask, name: e.target.value });
+                console.log(newTask.name);
+              }}
+              placeholder="task_name"
+              id="task_name"
+              type="text"
+            />
+          </label>
+        </form>
         <button
           onClick={() => {
             addTodo();
@@ -95,7 +115,7 @@ const Todo = () => {
         >
           <h2>todo</h2>
           {todosData?.map((todo, index) => {
-            if (todo.todo_status === "todo") {
+            if (todo.status === "todo") {
               return (
                 <TodoItemComp
                   todo={todo}
@@ -121,7 +141,7 @@ const Todo = () => {
         >
           <h2>inProgress</h2>
           {todosData?.map((todo, index) => {
-            if (todo.todo_status === "inProgress") {
+            if (todo.status === "inProgress") {
               return (
                 <TodoItemComp
                   todo={todo}
@@ -147,7 +167,7 @@ const Todo = () => {
         >
           <h2>completed</h2>
           {todosData?.map((todo, index) => {
-            if (todo.todo_status === "completed") {
+            if (todo.status === "completed") {
               return (
                 <TodoItemComp
                   todo={todo}

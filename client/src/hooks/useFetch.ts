@@ -8,7 +8,6 @@ const useFetch = (url: string, body: object | null | Date, method: string) => {
   const reFetch = () => {
     console.log("refetched");
   };
-  console.log(url, body, method);
   useEffect(() => {
     const dataFetch = async () => {
       setLoading(true);
@@ -18,7 +17,6 @@ const useFetch = (url: string, body: object | null | Date, method: string) => {
           url: url,
           data: { params: body },
         });
-        console.log(response.data);
         setData(response.data);
         setLoading(false);
       } catch (err) {

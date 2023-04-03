@@ -1,8 +1,17 @@
-#app {
-  &#dark {
-    $base: rgb(68, 68, 68);
-  }
-  &#light {
-    $base: rgb(202, 202, 202);
+@mixin gradient {
+  background: var(--accent-one);
+  background: linear-gradient(
+    90deg,
+    var(--accent-one) 0%,
+    var(--accent-two) 100%
+  );
+}
+.app {
+  background-color: var(--primary);
+  color: var(--font);
+  button {
+    @include gradient;
+    color: white;
+    border: none;
   }
 }

@@ -13,17 +13,19 @@
     ul {
       min-width: 200px;
       padding: 20px;
-      border: 1px solid lightgray;
       display: flex;
       flex-direction: column;
       list-style: none;
       li {
         padding: 20px;
         &:nth-child(2n) {
-          background-color: rgba(0, 255, 0, 0.151);
+          background-color: var(--secondary);
         }
         &:nth-child(2n + 1) {
-          background-color: rgba(251, 255, 0, 0.226);
+          background-color: var(--secondary);
+        }
+        &:not(:last-child) {
+          border-right: 2px solid var(--secondary);
         }
       }
     }

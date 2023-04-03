@@ -1,19 +1,22 @@
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Navbar from "./layout/Navbar";
 import Footer from "./layout/Footer";
-import ToDo from "./pages/Todo";
+import ToDo from "./pages/old_todo";
 import "./App.scss";
 import { LocalizationProvider, plPL } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import Test from "./pages/Test";
+import Test from "./pages/Todo";
 import store from "./app/store";
 import { selectTheme } from "./features/theme/themeSlice";
 import { useAppSelector } from "./app/hooks";
-
+import { useEffect } from "react";
 const Layout = () => {
   const theme = useAppSelector(selectTheme);
+  useEffect(() => {
+    document.getElementById("root")!.className = theme;
+  }, [theme]);
   return (
-    <div className="app" id={theme}>
+    <div className="app">
       <Navbar />
       <Outlet />
       <Footer />
