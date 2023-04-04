@@ -1,11 +1,11 @@
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
-import Navbar from "./layout/Navbar";
-import Footer from "./layout/Footer";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import ToDo from "./pages/old_todo";
 import "./App.scss";
 import { LocalizationProvider, plPL } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import Test from "./pages/Todo";
+import TodoPage from "./pages/TodoPage";
 import store from "./app/store";
 import { selectTheme } from "./features/theme/themeSlice";
 import { useAppSelector } from "./app/hooks";
@@ -30,11 +30,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <ToDo />,
+        element: <TodoPage />,
       },
       {
-        path: "/test",
-        element: <Test />,
+        path: "/old",
+        element: <ToDo />,
       },
     ],
   },

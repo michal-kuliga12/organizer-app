@@ -3,13 +3,13 @@ import Todo from "../features/todo/Todo";
 import { useSelector } from "react-redux";
 import { selectTheme } from "../features/theme/themeSlice";
 import useFetch from "../hooks/useFetch";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { DateCalendar } from "@mui/x-date-pickers";
 import { ITodo } from "../interfaces/todo";
 
-const Test = () => {
+const TodoPage = () => {
   const [newTask, setNewTask] = useState<ITodo>({
-    name: null,
+    name: "",
     status: "todo",
     created: new Date(),
     deadline: new Date(),
@@ -22,14 +22,26 @@ const Test = () => {
   return (
     <div>
       <h1>Test</h1>
+      <button
+        onClick={() => {
+          reFetch();
+        }}
+      >
+        refetch
+      </button>
       <DateCalendar
-        onChange={(newValue) => {
+        onChange={(newValue: any) => {
           setNewTask({ ...newTask, deadline: newValue.$d });
         }}
       />
-      <Todo tasks={data} newTask={newTask} setNewTask={setNewTask} />
+      <Todo
+        tasks={data}
+        newTask={newTask}
+        setNewTask={setNewTask}
+        reFetch={reFetch}
+      />
     </div>
   );
 };
 
-export default Test;
+export default TodoPage;

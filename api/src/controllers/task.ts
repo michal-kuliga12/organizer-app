@@ -8,17 +8,13 @@ const dateFormatter = (dateToFormat: Date) => {
   return formatedDate;
 };
 
-export const getTasks = async (req: Request, res: Response) => {
+export const getTasks = async (req, res) => {
   const date = req.params.date;
-  console.log(date);
   const formattedDate = dateFormatter(date);
-  console.log(formattedDate);
   try {
     const sql = `SELECT * FROM tasks WHERE deadline="${formattedDate}"`;
-    console.log(sql);
     await pool.query(sql, (err: Error, results: ITodo[]) => {
       if (err) throw err;
-      console.log(results);
       res.json(results);
     });
   } catch (error) {
@@ -26,8 +22,7 @@ export const getTasks = async (req: Request, res: Response) => {
   }
 };
 
-export const addTask = async (req: Request, res: Response) => {
-  console.log(req.body);
+export const addTask = async (req, res) => {
   let { name, status, created, deadline } = req.body;
   const formattedDeadline = dateFormatter(deadline);
   const formattedCreatedAt = dateFormatter(created);
@@ -42,9 +37,30 @@ export const addTask = async (req: Request, res: Response) => {
   }
 };
 
-export const replaceTasks = async (req: Request, res: Response) => {
-  console.log(req.body);
+export const editTask = async (req, res) => {
+  const data: ITodo | null = req.body;
+  const formattedDeadline = dateFormatter(data!.deadline);
   try {
+    const sql = `UPDATE tasks SET status="${
+      data!.status
+    }" WHERE (deadline="${formattedDeadline}" AND id=${data!.id});`;
+    await pool.query(sql, (err: Error, results: ITodo[]) => {
+      if (err) throw err;
+      res.json(results);
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const deleteTask = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const sql = `DELETE FROM tasks WHERE id=${id}`;
+    await pool.query(sql, (err: Error, results: ITodo[]) => {
+      if (err) throw err;
+      res.json(results);
+    });
   } catch (error) {
     console.error(error);
   }

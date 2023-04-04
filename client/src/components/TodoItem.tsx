@@ -24,13 +24,13 @@ const TodoItemComp = ({
       key={index}
       draggable
       onDragStart={(e) => {
-        dragStarted(e, todo?.uid);
+        dragStarted(e, todo?.id);
       }}
     >
       {todo?.name}
       <button
         onClick={() => {
-          deleteTodo(todo?.uid);
+          deleteTodo(todo?.id);
         }}
       >
         x
@@ -38,7 +38,7 @@ const TodoItemComp = ({
       {previousStatus && (
         <button
           onClick={() => {
-            todoStatusChange(todo?.uid, previousStatus);
+            todoStatusChange(todo?.id, previousStatus);
           }}
         >
           {"<"}
@@ -47,7 +47,7 @@ const TodoItemComp = ({
       {nextStatus && (
         <button
           onClick={() => {
-            todoStatusChange(todo?.uid, nextStatus);
+            todoStatusChange(todo?.id, nextStatus);
           }}
         >
           {">"}

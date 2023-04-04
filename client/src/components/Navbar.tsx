@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./Navbar.module.scss";
+import styles from "../styles/Navbar.module.scss";
 import {
   selectTheme,
   toggleDark,
@@ -10,18 +10,15 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 const Navbar: React.FC = () => {
   const theme = useAppSelector(selectTheme);
   const dispatch = useAppDispatch();
-  console.log(theme);
   return (
     <div className={styles.navbar}>
       <div>
         <button
           onClick={() => {
             if (theme === "light") {
-              console.log(theme);
               localStorage.setItem("theme", "dark");
               return dispatch(toggleDark());
             } else {
-              console.log(theme);
               localStorage.setItem("theme", "light");
               return dispatch(toggleLight());
             }
