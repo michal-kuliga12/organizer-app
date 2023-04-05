@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import TodoItemComp from "../../components/TodoItem";
 import { ITodo } from "../../interfaces/todo";
-import styles from "./Todo.module.scss";
+import styles from "../../styles/TodoPage.module.scss";
 import useFetch from "../../hooks/useFetch";
 import axios from "axios";
 import { useComponentDidMount } from "../../hooks/useComponentDidMount";
@@ -110,32 +110,9 @@ const Todo = (props: {
     setTodosData([...tempTodoData]);
     setTodoUpdated(true);
   };
-  // const upKeyChange = (e,index) => {}
-  // const downKeyChange = (e,index) => {}
   return (
-    <div className={styles.container}>
-      <div className={styles.toolbar}>
-        <form>
-          <label htmlFor="task_name">
-            <input
-              onChange={(e) => {
-                props.setNewTask({ ...props.newTask, name: e.target.value });
-              }}
-              placeholder="task_name"
-              id="task_name"
-              type="text"
-            />
-          </label>
-        </form>
-        <button
-          onClick={() => {
-            addTodo();
-          }}
-        >
-          Dodaj
-        </button>
-      </div>
-      <div className={styles.todos}>
+    <>
+      <div className={styles.todo} id={styles.todo1}>
         <TodoCategory
           draggingOver={draggingOver}
           dragEnded={dragEnded}
@@ -147,6 +124,8 @@ const Todo = (props: {
           previousStatus={null}
           nextStatus={"inProgress"}
         />
+      </div>
+      <div className={styles.todo} id={styles.todo2}>
         <TodoCategory
           draggingOver={draggingOver}
           dragEnded={dragEnded}
@@ -158,6 +137,8 @@ const Todo = (props: {
           previousStatus={"todo"}
           nextStatus={"completed"}
         />
+      </div>
+      <div className={styles.todo} id={styles.todo3}>
         <TodoCategory
           draggingOver={draggingOver}
           dragEnded={dragEnded}
@@ -170,7 +151,7 @@ const Todo = (props: {
           nextStatus={null}
         />
       </div>
-    </div>
+    </>
   );
 };
 

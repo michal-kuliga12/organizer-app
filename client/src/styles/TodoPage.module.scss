@@ -1,0 +1,133 @@
+@mixin elementStyling {
+  background-color: var(--secondary);
+  color: var(--font);
+  border-radius: 10px;
+  -webkit-box-shadow: 0px 0px 16px -6px rgba(66, 68, 90, 1);
+  -moz-box-shadow: 0px 0px 16px -6px rgba(66, 68, 90, 1);
+  box-shadow: 0px 0px 16px -6px rgba(66, 68, 90, 1);
+}
+.container {
+  display: grid;
+  padding: 30px;
+  min-height: 100vh;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 200px 0.1fr 100px 0.7fr;
+  grid-template-areas:
+    "calendar info info"
+    "calendar info info"
+    "calendar toolbar toolbar"
+    "todo1 todo2 todo3";
+  gap: 20px;
+  background-color: var(--primary);
+  .calendar {
+    grid-area: calendar;
+    @include elementStyling();
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .calendarRoot {
+      * {
+        color: var(--font);
+      }
+      button {
+        background-color: rgb(194, 194, 194);
+        border-radius: 10px;
+        &:hover {
+          background-color: red;
+        }
+      }
+    }
+  }
+  .info {
+    grid-area: info;
+    @include elementStyling();
+  }
+  .toolbar {
+    grid-area: toolbar;
+    @include elementStyling();
+  }
+  #todo1 {
+    grid-area: todo1;
+  }
+  #todo2 {
+    grid-area: todo2;
+  }
+  #todo3 {
+    grid-area: todo3;
+  }
+  .todo {
+    @include elementStyling();
+    padding: 20px;
+    z-index: 1;
+    .todoList {
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      z-index: 2;
+      height: 100%;
+      gap: 10px;
+      .todoListItem {
+        padding: 10px;
+        list-style: none;
+        border-radius: 10px;
+        border: 2px solid transparent;
+        position: relative;
+        background: linear-gradient(
+          45deg,
+          var(--accent-one),
+          var(--accent-two)
+        );
+        background-size: fill;
+        background-repeat: no-repeat;
+        height: 80px;
+        z-index: 3;
+        &:before {
+          content: "";
+          position: absolute;
+          display: flex;
+          border-radius: 10px;
+          background-color: var(--primary);
+          margin: 4px;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          z-index: 2;
+          /* !importanté */
+          border-radius: inherit; /* !importanté */
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1000px) {
+  .container {
+    grid-template-areas:
+      "calendar calendar"
+      "info toolbar"
+      "todo1 todo1"
+      "todo2 todo2"
+      "todo3 todo3";
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 400px 100px 1fr 1fr 1fr;
+    gap: 1.2rem;
+    padding: 10px;
+  }
+}
+@media (max-width: 500px) {
+  .container {
+    grid-template-areas:
+      "info"
+      "calendar"
+      " toolbar"
+      "todo1"
+      "todo2"
+      "todo3";
+    grid-template-columns: 100%;
+    grid-template-rows: 100px 400px 1fr 1fr 1fr;
+    gap: 1.2rem;
+    padding: 10px;
+  }
+}

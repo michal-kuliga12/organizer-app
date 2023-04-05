@@ -9,9 +9,9 @@
 .app {
   background-color: var(--primary);
   color: var(--font);
-  button {
-    @include gradient;
-    color: white;
-    border: none;
-  }
+  // button {
+  //   @include gradient;
+  //   color: white;
+  //   border: none;
+  // }
 }

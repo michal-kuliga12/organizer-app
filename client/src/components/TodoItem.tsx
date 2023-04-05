@@ -1,5 +1,6 @@
 import React from "react";
 import { ITodo } from "../interfaces/todo";
+import styles from "../styles/TodoPage.module.scss";
 
 interface ITodoItemComp {
   todo: ITodo;
@@ -21,6 +22,7 @@ const TodoItemComp = ({
 }: ITodoItemComp) => {
   return (
     <li
+      className={styles.todoListItem}
       key={index}
       draggable
       onDragStart={(e) => {
