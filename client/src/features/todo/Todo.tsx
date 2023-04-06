@@ -27,6 +27,7 @@ const Todo = (props: {
 }) => {
   const [todosData, setTodosData] = useState<ITodo[]>(props.tasks);
   const [todoUpdated, setTodoUpdated] = useState<Boolean>(false);
+  const [isDraggedOver, setIsDraggedOver] = useState(false);
 
   const isComponentMounted = useComponentDidMount();
   const todoRef = useRef<ITodo>();
@@ -110,9 +111,31 @@ const Todo = (props: {
     setTodosData([...tempTodoData]);
     setTodoUpdated(true);
   };
+  const handleAddClass = (e) => {
+    // if (isDraggedOver === false) {
+    //   console.log(isDraggedOver);
+    //   setIsDraggedOver(true);
+    //   e.currentTarget.classList.add(styles.overlay);
+    // }
+  };
+  const handleRemoveClass = (e) => {
+    // if(isDraggedOver)
+    // console.log(e.currentTarget);
+    // e.currentTarget.classList.remove(styles.overlay);
+  };
   return (
     <>
-      <div className={styles.todo} id={styles.todo1}>
+      <div
+        onDragOver={(e) => {
+          // e.currentTarget.classList.add(styles.overlay);
+          handleAddClass(e);
+        }}
+        onDragLeave={(e) => {
+          handleRemoveClass(e);
+        }}
+        className={`${styles.todo}`}
+        id={styles.todo1}
+      >
         <TodoCategory
           draggingOver={draggingOver}
           dragEnded={dragEnded}
@@ -125,7 +148,13 @@ const Todo = (props: {
           nextStatus={"inProgress"}
         />
       </div>
-      <div className={styles.todo} id={styles.todo2}>
+      <div
+        onDragOver={(e) => {
+          console.log("dragged over");
+        }}
+        className={styles.todo}
+        id={styles.todo2}
+      >
         <TodoCategory
           draggingOver={draggingOver}
           dragEnded={dragEnded}
@@ -138,7 +167,13 @@ const Todo = (props: {
           nextStatus={"completed"}
         />
       </div>
-      <div className={styles.todo} id={styles.todo3}>
+      <div
+        onDragOver={(e) => {
+          console.log("dragged over");
+        }}
+        className={styles.todo}
+        id={styles.todo3}
+      >
         <TodoCategory
           draggingOver={draggingOver}
           dragEnded={dragEnded}

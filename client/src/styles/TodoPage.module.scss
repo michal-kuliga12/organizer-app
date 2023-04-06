@@ -4,7 +4,8 @@
   border-radius: 10px;
   -webkit-box-shadow: 0px 0px 16px -6px rgba(66, 68, 90, 1);
   -moz-box-shadow: 0px 0px 16px -6px rgba(66, 68, 90, 1);
-  box-shadow: 0px 0px 16px -6px rgba(66, 68, 90, 1);
+  // box-shadow: 2px 2px 16px -7px rgb(136, 136, 136);
+  box-shadow: 3px 3px 16px -7px rgb(48, 48, 48);
 }
 .container {
   display: grid;
@@ -58,9 +59,22 @@
   }
   .todo {
     @include elementStyling();
-    padding: 20px;
     z-index: 1;
+    position: relative;
+    &.overlay::after {
+      content: "";
+      position: absolute;
+      border-radius: 10px;
+      background-color: rgba(105, 105, 105, 0.884);
+      width: 100%;
+      z-index: 100;
+      height: 100%;
+      top: 0;
+      bottom: 0;
+      left: 0;
+    }
     .todoList {
+      position: relative;
       padding: 0;
       display: flex;
       flex-direction: column;
@@ -71,31 +85,26 @@
         padding: 10px;
         list-style: none;
         border-radius: 10px;
-        border: 2px solid transparent;
         position: relative;
-        background: linear-gradient(
-          45deg,
-          var(--accent-one),
-          var(--accent-two)
-        );
-        background-size: fill;
-        background-repeat: no-repeat;
+        background-color: var(--primary);
         height: 80px;
-        z-index: 3;
-        &:before {
+        z-index: 4;
+        &::before {
           content: "";
           position: absolute;
-          display: flex;
-          border-radius: 10px;
-          background-color: var(--primary);
-          margin: 4px;
-          top: 0;
-          right: 0;
-          bottom: 0;
-          left: 0;
-          z-index: 2;
-          /* !importanté */
-          border-radius: inherit; /* !importanté */
+          inset: 0;
+          border-radius: 10px; /*1*/
+          border: 2px solid transparent; /*2*/
+          background: linear-gradient(
+              45deg,
+              var(--accent-one),
+              var(--accent-two)
+            )
+            border-box; /*3*/
+          -webkit-mask: /*4*/ linear-gradient(#fff 0 0) padding-box,
+            linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor; /*5'*/
+          mask-composite: exclude; /*5*/
         }
       }
     }

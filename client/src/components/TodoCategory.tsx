@@ -21,7 +21,7 @@ const TodoCategory = (props: {
       onDrop={(e) => {
         props.dragEnded(e, props.category);
       }}
-      className={styles.todoList}
+      className={`${styles.todoList}`}
     >
       <h2>{props.category}</h2>
       {props.todosData?.map((todo: ITodo, index: number) => {
