@@ -2,9 +2,15 @@ import React from "react";
 import styles from "../styles/TodoPage.module.scss";
 import TodoItemComp from "./TodoItem";
 import { ITodo } from "../interfaces/todo";
+import {
+  AiFillClockCircle,
+  AiFillCheckCircle,
+  AiFillStar,
+} from "react-icons/ai";
 const TodoCategory = (props: {
   draggingOver: Function;
   dragEnded: Function;
+  title: string;
   category: string;
   todosData: ITodo[];
   dragStarted: Function;
@@ -23,7 +29,14 @@ const TodoCategory = (props: {
       }}
       className={`${styles.todoList}`}
     >
-      <h2>{props.category}</h2>
+      <h2>
+        {props.title}
+        <span>
+          {(props.category === "todo" && <AiFillStar />) ||
+            (props.category === "inProgress" && <AiFillClockCircle />) ||
+            (props.category === "completed" && <AiFillCheckCircle />)}
+        </span>
+      </h2>
       {props.todosData?.map((todo: ITodo, index: number) => {
         if (todo.status === props.category) {
           return (

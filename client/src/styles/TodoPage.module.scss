@@ -31,22 +31,42 @@
       * {
         color: var(--font);
       }
-      button {
-        background-color: rgb(194, 194, 194);
-        border-radius: 10px;
-        &:hover {
-          background-color: red;
-        }
-      }
     }
   }
   .info {
     grid-area: info;
     @include elementStyling();
+    padding: 20px;
+    h1 {
+      font-size: 32px;
+    }
   }
   .toolbar {
     grid-area: toolbar;
     @include elementStyling();
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+
+    .addTaskInput {
+      background-color: var(--secondary);
+      border: none;
+      border-bottom: 1px solid lightgray;
+      padding: 10px;
+      height: 50px;
+      box-sizing: border-box;
+      color: var(--font);
+      font-size: 16px;
+      flex: 2;
+    }
+    .addTaskBtn {
+      flex: 1;
+      height: 50px;
+      background-color: var(--accent-one);
+      color: var(--font);
+      border-bottom-left-radius: 0;
+      border-top-left-radius: 0;
+    }
   }
   #todo1 {
     grid-area: todo1;
@@ -79,8 +99,19 @@
       display: flex;
       flex-direction: column;
       z-index: 2;
+      margin: 0;
+      padding: 0 20px;
       height: 100%;
       gap: 10px;
+      h2 {
+        border-bottom: 1px solid lightgray;
+        display: flex;
+        gap: 10px;
+        span {
+          display: flex;
+          align-items: center;
+        }
+      }
       .todoListItem {
         padding: 10px;
         list-style: none;
@@ -114,8 +145,8 @@
 @media (max-width: 1000px) {
   .container {
     grid-template-areas:
-      "calendar calendar"
-      "info toolbar"
+      "calendar info"
+      "toolbar toolbar"
       "todo1 todo1"
       "todo2 todo2"
       "todo3 todo3";
@@ -125,7 +156,7 @@
     padding: 10px;
   }
 }
-@media (max-width: 500px) {
+@media (max-width: 768px) {
   .container {
     grid-template-areas:
       "info"
@@ -135,7 +166,7 @@
       "todo2"
       "todo3";
     grid-template-columns: 100%;
-    grid-template-rows: 100px 400px 1fr 1fr 1fr;
+    grid-template-rows: auto 400px 1fr 1fr 1fr;
     gap: 1.2rem;
     padding: 10px;
   }

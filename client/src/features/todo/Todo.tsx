@@ -6,6 +6,7 @@ import useFetch from "../../hooks/useFetch";
 import axios from "axios";
 import { useComponentDidMount } from "../../hooks/useComponentDidMount";
 import TodoCategory from "../../components/TodoCategory";
+import { AiFillClockCircle } from "react-icons/ai";
 
 class TodoItem implements ITodo {
   name: string;
@@ -139,6 +140,7 @@ const Todo = (props: {
         <TodoCategory
           draggingOver={draggingOver}
           dragEnded={dragEnded}
+          title={"Do zrobienia"}
           category={"todo"}
           todosData={todosData}
           dragStarted={dragStarted}
@@ -158,6 +160,7 @@ const Todo = (props: {
         <TodoCategory
           draggingOver={draggingOver}
           dragEnded={dragEnded}
+          title={"Oczekiwane"}
           category={"inProgress"}
           todosData={todosData}
           dragStarted={dragStarted}
@@ -177,6 +180,7 @@ const Todo = (props: {
         <TodoCategory
           draggingOver={draggingOver}
           dragEnded={dragEnded}
+          title={"Ukończone"}
           category={"completed"}
           todosData={todosData}
           dragStarted={dragStarted}

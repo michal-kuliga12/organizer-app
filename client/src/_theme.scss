@@ -1,9 +1,11 @@
 // DARK THEME
 $dark-primary: rgb(24, 23, 23);
-$dark-secondary: rgb(37, 37, 37, 0.7);
-$dark-accent-one: rgb(216, 33, 155);
+// $dark-secondary: rgb(37, 37, 37, 0.7);
+$dark-secondary: rgba(37, 37, 37, 0.7);
+$dark-accent-one: rgba(217, 91, 175, 0.863);
+// $dark-accent-one: rgb(220, 76, 172);
 $dark-accent-two: rgb(17, 176, 216);
-$dark-font: rgba(255, 255, 255, 0.85);
+$dark-font: rgba(255, 255, 255, 0.707);
 
 // LIGHT THEME
 $light-primary: rgb(255, 255, 255);
