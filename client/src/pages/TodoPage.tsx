@@ -21,7 +21,7 @@ const TodoPage = () => {
   });
   const theme = useAppSelector(selectTheme);
   const { data, loading, error, reFetch } = useFetch(
-    `http://localhost:5000/task/${newTask.deadline}`,
+    `${import.meta.env.VITE_API_URL}/task/${newTask.deadline}`,
     { date: newTask.deadline },
     "get"
   );
@@ -47,7 +47,7 @@ const TodoPage = () => {
         />
       </div>
       <Info />
-      <Toolbar />
+      <Toolbar newTask={newTask} setNewTask={setNewTask} reFetch={reFetch} />
       <Todo
         tasks={data}
         newTask={newTask}

@@ -11,45 +11,46 @@ interface ITodoItemComp {
   nextStatus: string | null;
   todoStatusChange: Function;
 }
-const TodoItemComp = ({
-  todo,
-  index,
-  dragStarted,
-  deleteTodo,
-  previousStatus,
-  nextStatus,
-  todoStatusChange,
-}: ITodoItemComp) => {
+const TodoItemComp = (props: {
+  todo: ITodo;
+  index: number;
+  dragStarted: Function;
+  deleteTodo: Function;
+  previousStatus: string | null;
+  nextStatus: string | null;
+  todoStatusChange: Function;
+}) => {
   return (
     <li
       className={styles.todoListItem}
-      key={index}
+      key={props.index}
       draggable
       onDragStart={(e) => {
-        dragStarted(e, todo?.id);
+        props.dragStarted(e, props.todo?.id, props.todo?.status);
       }}
     >
-      {todo?.name}
+      {props.todo?.name}
       <button
         onClick={() => {
-          deleteTodo(todo?.id);
+          console.log(props.todo?.id);
+          props.deleteTodo(props.todo?.id);
         }}
       >
         x
       </button>
-      {previousStatus && (
+      {props.previousStatus && (
         <button
           onClick={() => {
-            todoStatusChange(todo?.id, previousStatus);
+            props.todoStatusChange(props.todo?.id, props.previousStatus);
           }}
         >
           {"<"}
         </button>
       )}
-      {nextStatus && (
+      {props.nextStatus && (
         <button
           onClick={() => {
-            todoStatusChange(todo?.id, nextStatus);
+            props.todoStatusChange(props.todo?.id, props.nextStatus);
           }}
         >
           {">"}

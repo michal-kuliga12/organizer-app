@@ -8,18 +8,6 @@ import { useComponentDidMount } from "../../hooks/useComponentDidMount";
 import TodoCategory from "../../components/TodoCategory";
 import { AiFillClockCircle } from "react-icons/ai";
 
-class TodoItem implements ITodo {
-  name: string;
-  status: string;
-  created: Date;
-  deadline: Date;
-  constructor(name: string, status: string, deadline: Date, createdAt: Date) {
-    this.name = name;
-    this.status = status;
-    this.created = deadline;
-    this.deadline = createdAt;
-  }
-}
 const Todo = (props: {
   tasks: ITodo[];
   newTask: ITodo;
@@ -28,7 +16,7 @@ const Todo = (props: {
 }) => {
   const [todosData, setTodosData] = useState<ITodo[]>(props.tasks);
   const [todoUpdated, setTodoUpdated] = useState<Boolean>(false);
-  const [isDraggedOver, setIsDraggedOver] = useState(false);
+  const [dragStartpoint, setDragStartpoint] = useState<String>("");
 
   const isComponentMounted = useComponentDidMount();
   const todoRef = useRef<ITodo>();
@@ -55,21 +43,6 @@ const Todo = (props: {
     }
   };
 
-  // ADDING TODO
-  const addTodo = async () => {
-    const newTodo = new TodoItem(
-      props.newTask.name,
-      props.newTask.status,
-      new Date(),
-      props.newTask.deadline
-    );
-    try {
-      await axios.post(`http://localhost:5000/task`, newTodo);
-      props.reFetch();
-    } catch (error) {
-      console.error(error);
-    }
-  };
   // DELETING TODO BY ID
   const deleteTodo = async (id: string) => {
     const todoToDelete = todosData.filter(
@@ -85,8 +58,14 @@ const Todo = (props: {
     // setTodosData([...tempTodoData]);
   };
   // DRAGGING START
-  const dragStarted = (e: React.DragEvent<HTMLLIElement>, id: string) => {
+  const dragStarted = (
+    e: React.DragEvent<HTMLLIElement>,
+    id: string,
+    status: string
+  ) => {
     e.dataTransfer.setData("todoId", id);
+    setDragStartpoint(status);
+    console.log(status);
   };
   // DRAGGING OVER
   const draggingOver = (e: React.DragEvent<HTMLUListElement>) => {
@@ -99,6 +78,7 @@ const Todo = (props: {
   ) => {
     const transferedTodoid = e.dataTransfer.getData("todoId");
     todoStatusChange(transferedTodoid, newStatus);
+    setDragStartpoint(newStatus);
   };
   const todoStatusChange = (id: string, newStatus: string) => {
     const todoIndex = todosData.findIndex(
@@ -112,33 +92,34 @@ const Todo = (props: {
     setTodosData([...tempTodoData]);
     setTodoUpdated(true);
   };
-  const handleAddClass = (e) => {
-    // if (isDraggedOver === false) {
-    //   console.log(isDraggedOver);
-    //   setIsDraggedOver(true);
-    //   e.currentTarget.classList.add(styles.overlay);
-    // }
+
+  const addDropZoneOverlay = (e) => {
+    console.log(e.target.classList);
+    if (e.target.classList.contains(`${styles.dropzone}`)) {
+      e.target.classList.add(`${styles.dragover}`);
+    }
   };
-  const handleRemoveClass = (e) => {
-    // if(isDraggedOver)
-    // console.log(e.currentTarget);
-    // e.currentTarget.classList.remove(styles.overlay);
+  const removeDropZoneOverlay = (e) => {
+    console.log(e.target.classList);
+    if (e.target.classList.contains(`${styles.dropzone}`)) {
+      e.target.classList.remove(`${styles.dragover}`);
+    }
   };
   return (
     <>
       <div
-        onDragOver={(e) => {
-          // e.currentTarget.classList.add(styles.overlay);
-          handleAddClass(e);
-        }}
-        onDragLeave={(e) => {
-          handleRemoveClass(e);
-        }}
         className={`${styles.todo}`}
         id={styles.todo1}
+        onDragEnter={(e) => {
+          addDropZoneOverlay(e);
+        }}
+        onDragLeave={(e) => {
+          removeDropZoneOverlay(e);
+        }}
       >
         <TodoCategory
           draggingOver={draggingOver}
+          dragStartpoint={dragStartpoint}
           dragEnded={dragEnded}
           title={"Do zrobienia"}
           category={"todo"}
@@ -151,14 +132,18 @@ const Todo = (props: {
         />
       </div>
       <div
-        onDragOver={(e) => {
-          console.log("dragged over");
-        }}
-        className={styles.todo}
+        className={`${styles.todo}`}
         id={styles.todo2}
+        onDragEnter={(e) => {
+          addDropZoneOverlay(e);
+        }}
+        onDragLeave={(e) => {
+          removeDropZoneOverlay(e);
+        }}
       >
         <TodoCategory
           draggingOver={draggingOver}
+          dragStartpoint={dragStartpoint}
           dragEnded={dragEnded}
           title={"Oczekiwane"}
           category={"inProgress"}
@@ -171,14 +156,18 @@ const Todo = (props: {
         />
       </div>
       <div
-        onDragOver={(e) => {
-          console.log("dragged over");
-        }}
-        className={styles.todo}
+        className={`${styles.todo}`}
         id={styles.todo3}
+        onDragEnter={(e) => {
+          addDropZoneOverlay(e);
+        }}
+        onDragLeave={(e) => {
+          removeDropZoneOverlay(e);
+        }}
       >
         <TodoCategory
           draggingOver={draggingOver}
+          dragStartpoint={dragStartpoint}
           dragEnded={dragEnded}
           title={"Ukończone"}
           category={"completed"}

@@ -9,6 +9,7 @@ import {
 } from "react-icons/ai";
 const TodoCategory = (props: {
   draggingOver: Function;
+  dragStartpoint: String;
   dragEnded: Function;
   title: string;
   category: string;
@@ -27,7 +28,9 @@ const TodoCategory = (props: {
       onDrop={(e) => {
         props.dragEnded(e, props.category);
       }}
-      className={`${styles.todoList}`}
+      className={`${styles.todoList} ${
+        props.dragStartpoint !== props.category ? `${styles.dropzone}` : ""
+      }`}
     >
       <h2>
         {props.title}
