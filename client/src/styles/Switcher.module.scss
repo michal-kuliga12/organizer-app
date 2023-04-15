@@ -1,0 +1,58 @@
+.switcher {
+  width: 80px;
+  height: 37px;
+  border: 1px solid lightgray;
+  border-radius: 50px;
+  box-sizing: border-box;
+  background-color: var(--secondary);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  .icon {
+    width: 40px;
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+  .marker {
+    position: absolute;
+    border: 1px solid lightgray;
+    border-radius: 50%;
+    height: 35px;
+    width: 35px;
+    z-index: 100;
+    transition: 0.2s;
+  }
+  &.light {
+    #moon {
+      opacity: 0;
+    }
+    &:hover {
+      cursor: pointer;
+      .marker {
+        background-color: lightgray;
+      }
+    }
+  }
+  &.dark {
+    border: 1px solid rgb(65, 65, 65);
+    &:hover {
+      cursor: pointer;
+      .marker {
+        background-color: rgb(65, 65, 65);
+      }
+    }
+    #sun {
+      opacity: 0;
+    }
+    .marker {
+      background-color: var(--third);
+      border: 1px solid rgb(65, 65, 65);
+      transition: 0.2s;
+      transform: translateX(43px);
+    }
+  }
+}

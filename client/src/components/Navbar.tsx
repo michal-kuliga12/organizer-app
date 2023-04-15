@@ -6,28 +6,24 @@ import {
   toggleLight,
 } from "../features/theme/themeSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
+import Switcher from "./Switcher";
 
 const Navbar: React.FC = () => {
   const theme = useAppSelector(selectTheme);
   const dispatch = useAppDispatch();
   return (
-    <div className={styles.navbar}>
-      <div>
-        <button
-          onClick={() => {
-            if (theme === "light") {
-              localStorage.setItem("theme", "dark");
-              return dispatch(toggleDark());
-            } else {
-              localStorage.setItem("theme", "light");
-              return dispatch(toggleLight());
-            }
-          }}
-        >
-          Toggle theme
-        </button>
+    <header className={styles.navbar}>
+      <h3>Organizer</h3>
+      <div className={styles.navbarMenu}>
+        <nav>
+          <ul>
+            <li>Organizer</li>
+            <li>Plan treningowy</li>
+          </ul>
+        </nav>
+        <Switcher />
       </div>
-    </div>
+    </header>
   );
 };
 
